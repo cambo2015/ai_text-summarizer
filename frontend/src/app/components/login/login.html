@@ -1,0 +1,69 @@
+<div class="d-flex justify-content-center align-items-center  vh-100 my-auto bg-image">
+    <div class="bg-white mx-auto  p-3 shadow rounded" style="max-width: 400px">
+        <!-- <div class="grape-logo">
+            
+        </div> -->
+        <div class="d-flex justify-content-center rounded flex-column w-100"
+            style="height:120px;position:relative;top:-50px;">
+
+            <div class="my-2 mx-0 align-self-center shadow rounded bg-primary d-flex justify-content-center p-2"
+                style=" width:300px; ">
+                <!-- <img  class="grape-img m-1"  style="position:relative; top:-50px;" src="img/paint.jpg" alt="Grape Logo" /> -->
+                <i class="bg-white grape-icon m-1 fs-2 bi bi-lock-fill text-primary"></i>
+
+            </div>
+            <h1 class="text-center  fs-3 text-white" style="position:relative; top:-60px; ">LOGIN </h1>
+
+        </div>
+
+        <form [formGroup]="loginFormGroup" (ngSubmit)="onSubmit()"
+            [class.has-auth-error]="loginFormGroup.errors?.['authFailed']" class="p-4 rounded shadow  bg-error">
+
+            <!-- email -->
+            <div class=" rounded">
+                <div class="input-group my-1 d-flex">
+                    <label class="bg-white text-primary input-group-text">Email: <i
+                            class="bi bi-envelope-fill text-primary ms-2 fs-5 ms-auto"></i></label>
+                    <input class="form-control" formControlName="username" type="text">
+                </div>
+
+
+                <div *ngIf="username?.invalid && (username?.dirty || username?.touched)"
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="username?.errors?.['required']">
+                        Email is required
+                    </div>
+                    <div *ngIf="username?.errors?.['pattern']">
+                        Email must be a valid email address format
+                    </div>
+                </div>
+            </div>
+
+            <!-- password -->
+            <div class=" rounded">
+                <div class="input-group my-3 d-flex">
+                    <label class="bg-white text-primary input-group-text">Password: <i
+                            class="bi bi-key-fill text-primary  fs-5 ms-auto "></i></label>
+                    <input class="form-control" formControlName="password" type="password">
+                </div>
+
+
+                <div *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="password?.errors?.['required']">
+                        password is required
+                    </div>
+                </div>
+            </div>
+            <div class=" w-100 d-flex justify-content-center mt-5">
+                <button class="btn btn-primary my-2 text-white" type="submit">Sumbit <i
+                        class="bi bi-send-fill ms-2 text-white"></i></button>
+            </div>
+
+        </form>
+        <div *ngIf="authError" class="alert alert-danger" aria-live="polite">
+            {{ authError }}
+        </div>
+
+    </div>
+</div>

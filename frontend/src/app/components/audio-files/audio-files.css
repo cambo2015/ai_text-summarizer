@@ -1,0 +1,21 @@
+
+
+#audio-files-container {
+  height: 100%;
+  margin:auto;
+  
+  overflow: auto;  
+  /* padding-bottom: 200px; */
+  overflow: auto;
+  max-height: 80vh;
+}
+
+
+#skateboard-img{
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    clip-path: circle(50% at 50% 50%);
+    background-color: var(--bs-primary);
+    color:white;
+}

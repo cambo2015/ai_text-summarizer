@@ -1,0 +1,30 @@
+
+
+
+<div id="audio-files-container" class="col-12 col-md-6 m-auto h-100 h-100 px-2">
+  <app-audio-player *ngFor="let audio of audioFiles" [audio]="audio">
+  </app-audio-player>
+  <div *ngIf="audioFiles.length === 0" class=" w-100 mt-5">
+      <img id="skateboard-img" src="/img/skateboard 1.svg" alt="No Audio Files" class="img-fluid d-block mx-auto my-4 shadow-xl" />
+      
+      <div *ngIf="!subscribedToStripe" class="m-3">
+        <p class="text-center fs-2">You're not subscribed yet</p>
+        <p class="text-center text-muted">Please click the button below to subscribe to use the available features.</p>
+        <div class="d-flex align-items-center justify-content-center w-100">
+          <app-stp-checkoutbutton></app-stp-checkoutbutton>
+        </div>
+        
+        
+      </div>
+      <div *ngIf="subscribedToStripe">
+        <p class="text-center fs-2">No Audio Yet</p>
+        <p class="text-center text-muted">...use the menu to record a new audio file.</p>
+      </div>
+      
+  </div>
+   
+</div>
+<div class="w-100 d-flex align-items-center justify-content-center my-2 rounded-5">
+  <app-custom-pagination></app-custom-pagination>
+</div>
+

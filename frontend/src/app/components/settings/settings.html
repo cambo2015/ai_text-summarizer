@@ -1,0 +1,50 @@
+<div class=" m-md-auto">
+    <button class="custom-button d-flex align-items-center justify-content-center mb-3 p-3" (click)="onBackClick()"><i
+            class="bi bi-arrow-left fs-3"></i> <span class="m-1">Back</span></button>
+    <div class="settings-container shadow  rounded">
+
+        <h2 class="text-center bg-primary text-white p-2 rounded-top">Settings</h2>
+        <!-- this should change when selected radio button changes -->
+        <!-- selcted model -->
+        <div class="m-4">
+            <!-- <div class="d-flex flex-column align-items-center justify-content-center mt-3">
+                <div id="model-selection">
+                    <h3 class="text-center fs-3">AI Models</h3>
+                    <hr />
+                    <p class="fs-4">Choose a model type:</p>
+                    <div class="d-flex flex-column " *ngFor="let type of modelTypes">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="modelType" [id]="type+'-radio-button'"
+                                [value]="type" [checked]="type == modelType" (change)="onModelTypeChange(type)">
+                            <label class="form-check-label" [for]="type+'-radio-button'">
+                                {{ type }}
+                            </label>
+                        </div>
+                    </div>
+                    <app-model-selection></app-model-selection>
+                    <p *ngIf="loading"><app-spinner size="lg" color="primary"></app-spinner></p>
+                </div>
+            </div> -->
+
+            <div class="my-2 p-2">
+                <h3 class="text-center mt-5 fs-3">Subscription Management</h3>
+                
+                <div *ngIf="!subscriptionStatus"
+                    class="d-flex flex-column align-items-center justify-content-center mt-3">
+                    <app-stp-checkoutbutton></app-stp-checkoutbutton>
+                </div>
+                <div *ngIf="subscriptionStatus"
+                    class="d-flex flex-column align-items-center justify-content-center mt-3">
+                    <p class="text-center mt-5">You are currently subscribed!</p>
+                    <hr />
+                    <div class="alert alert-success mt-2">
+                        Thank you for subscribing! You now have access to premium features.
+                    </div>
+                    <div class="m-2 p-2" style="margin-bottom: 8px !important;">
+                        <app-stp-edit-subscription-button></app-stp-edit-subscription-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<!-- MODAL -->
+<div class="modal fade" id="customTemplateModal" tabindex="-1" (hidden.bs.modal)="onHidden()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white " data-bs-theme="dark">
+        <h5 class="modal-title">Custom Summary Template</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-dialog">
+        <div *ngIf="!isEditing && !this.text.includes('Error')">
+            <p class="p-4">{{this.text}}</p>
+        </div>
+        <div class="m-auto">
+           <app-loading-information *ngIf="loading" [text]="'Loading template...'" color="primary"></app-loading-information>
+        </div>
+        
+        <p *ngIf="text.includes('Error') && !isEditing">Click below to edit the template instructions for the LLM</p>
+        
+      </div>
+      <div class="modal-body w-100">
+        <div class="w-100 d-flex justify-content-end" *ngIf="!isEditing && !errorMessage">
+            <button class="no-bg-icon-btn mb-2" (click)="toggleEdit()" >
+                <i class="bi bi-pencil-fill"></i>  
+            </button> 
+        </div>
+        
+        <div *ngIf="isEditing">
+            
+            <button class="btn btn-primary mb-2" (click)="toggleEdit()" enabled="true">
+                <div class=" d-flex align-items-center">
+                        <i class="bi bi-arrow-left fs-5"></i><span class="ms-2">Back</span>
+                </div>
+            </button>
+            <textarea
+                [(ngModel)]="textBoxText"
+                class="form-control"
+                placeholder="Enter custom summary template"
+                rows="10"
+                cols="10">
+            </textarea>
+            <button class="no-bg-icon-btn mt-2 me-auto" (click)="saveTemplate()">
+                 
+                <i class="bi bi-floppy-fill"></i>
+            </button>
+        </div>
+        <p *ngIf="errorMessage" class="text-danger">{{errorMessage}} <a href="/settings">Subscribe in settings</a></p>
+    </div>
+  </div>
+</div>

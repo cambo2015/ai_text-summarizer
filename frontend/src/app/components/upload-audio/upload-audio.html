@@ -1,0 +1,44 @@
+
+
+
+<!-- MODAL -->
+<div class="modal fade" id="uploadModal" tabindex="-1" (hidden.bs.modal)="onHidden()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white" data-bs-theme="dark">
+        <h5 class="modal-title">Upload Audio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+            <label class="form-label fw-semibold">
+                Upload audio file
+            </label>
+
+            <input
+            *ngIf="!loading"
+                type="file"
+                class="form-control"
+                accept="audio/mpeg"
+                (change)="onFileSelected($event)"
+            />
+            <p *ngIf="loading">Uploading...</p>
+
+
+            <button class="btn btn-primary m-2" (click)="upload()">
+                <span *ngIf="loading">
+                    <app-spinner size="sm" color="primary"></app-spinner>
+                </span>
+                <span *ngIf="!loading">
+                    <i class="bi bi-cloud-arrow-up-fill m-1"></i>
+                    <span>Upload</span>
+                </span>
+            </button>
+
+            <p class="m-2 p-2 text-success">{{text}}</p>
+            <p *ngIf="errorMessage" class="text-danger">{{errorMessage}} <a href="/settings">Subscribe in settings</a></p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>

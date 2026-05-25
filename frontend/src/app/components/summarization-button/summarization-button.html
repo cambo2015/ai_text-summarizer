@@ -1,0 +1,38 @@
+
+
+
+
+
+<!-- Button trigger modal -->
+<button type="button"  (click)="clickSummarizeData()" class="audio-button-success" data-bs-toggle="modal" [attr.data-bs-target]="'#' + modalId" [disabled]="isLoading">
+  <div *ngIf="isLoading">
+    <app-spinner size="sm" color="success"></app-spinner>
+  </div>
+   <div *ngIf="!isLoading">
+      <i class="bi bi-magic"></i>
+   </div>
+</button>
+
+<!-- Modal -->
+<div class="modal fade" [id]="modalId" tabindex="-1" aria-labelledby="summarizationModalLabel" aria-hidden="true" >
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white" data-bs-theme="dark">
+        <h5 class="modal-title" id="summarizationModalLabel">Summary</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div *ngIf="isLoading ==true" class="d-flex align-items-center justify-content-center">
+            <app-loading-information [text]="'Loading summary. Please wait...'" color="primary"></app-loading-information> 
+        </div>
+        <p class="summary-text" *ngIf="isLoading ==false" >
+            {{summarizationText}}
+        </p>
+      </div>
+      <div class="modal-footer">
+        <p></p>
+      </div>
+    </div>
+  </div>
+</div>
+

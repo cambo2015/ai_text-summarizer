@@ -1,0 +1,66 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: alpha-mysql
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE_NAME}
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-ualpha", "-palpha_pass"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+
+  backend:
+    build:
+      context: .
+    container_name: alpha-backend
+    restart: "no"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    env_file:
+      - .env.prod
+    ports:
+      - "8443:8443"
+    volumes:
+      - ./files:/files
+      - ./target/website-0.0.1-SNAPSHOT.jar:/app/app.jar
+    environment:
+      SPRING_DATASOURCE_URL: ${MYSQL_URL}
+      SPRING_DATASOURCE_USERNAME: ${MYSQL_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ../UI
+    container_name: alpha-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+volumes:
+  mysql_data:
+  vault_data:
+
+networks:
+  app-network:

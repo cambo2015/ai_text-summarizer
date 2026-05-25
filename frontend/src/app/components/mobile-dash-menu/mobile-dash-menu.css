@@ -1,0 +1,204 @@
+
+
+:host{
+    --spacing: 2em;
+    
+}
+
+i{
+    background: inherit;
+}
+
+
+
+.menu-container{
+    display:flex;
+    flex-direction: column;
+    gap:var(--spacing);
+    position:fixed;
+    bottom:0;
+    right:0;
+    padding:var(--spacing);
+    z-index: 100;
+}
+
+#mobile-menu-button{
+    background: var(--bs-primary);
+    color:white !important;
+}
+
+.circle-button{
+    width:calc(2 * var(--spacing));
+    height:calc(2 * var(--spacing));
+    border-radius:50%;
+    background-color: white;
+    border: none;
+}
+
+/* hide behind + button */
+.menu-container > :nth-child(1){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: none !important;
+}
+.menu-container > :nth-child(2){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+     box-shadow: none !important;
+}
+.menu-container > :nth-child(3){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+     box-shadow: none !important;
+}
+
+.menu-container > :nth-child(4){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: none !important;
+}
+
+.menu-container > :nth-child(5){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: none !important;
+}
+
+.menu-container > :nth-child(6){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: none !important;
+}
+
+/* .menu-container > :nth-child(7){
+   
+    position:absolute !important;
+    bottom:0 !important;
+    right:0 !important;
+    margin:var(--spacing);
+    z-index: -1;
+    transition: transform 0.3s ease-in-out;
+    box-shadow: none !important;
+} */
+
+
+
+
+
+/* show them with button container is clicked */
+.open.menu-container > :nth-child(1){
+    transform: translateY(-120%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+    background: white;
+}
+.open.menu-container > :nth-child(2){
+    transform: translateY(-240%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+     background: white;
+}
+.open.menu-container > :nth-child(3){
+    transform: translateY(-360%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+     background: white;
+}
+.open.menu-container > :nth-child(4){
+    transform: translateY(-480%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+     background: white;
+}
+.open.menu-container > :nth-child(5){
+    transform: translateY(-600%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+     background: white;
+}
+
+.open.menu-container > :nth-child(6){
+    transform: translateY(-720%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+    background: white;
+}
+
+/* .open.menu-container > :nth-child(7){
+    transform: translateY(-840%);
+    transition: transform 0.3s ease-in-out;
+    box-shadow: var(--bs-box-shadow) !important;
+    background: white;
+} */
+
+
+/* 1 — primary */
+.menu-container > .circle-button:nth-child(1):hover {
+    background-color: var(--bs-primary);
+    color: white !important;
+}
+
+/* 2 — secondary */
+.menu-container > .circle-button:nth-child(2):hover {
+    background-color: var(--bs-secondary);
+    color: white !important;
+}
+
+/* 3 — success */
+.menu-container > .circle-button:nth-child(3):hover {
+    background-color: var(--bs-danger);
+    color: white !important;
+}
+
+/* 4 — danger */
+.menu-container > .circle-button:nth-child(4):hover {
+    background-color: var(--bs-info);
+    color: white !important;
+}
+
+/* 5 — secondary */
+.menu-container > .circle-button:nth-child(5):hover {
+    background-color: var(--bs-success);
+    color: white !important;
+}
+
+/* 6 — success */
+.menu-container > .circle-button:nth-child(6):hover {
+    background-color: var(--bs-danger);
+    color: white !important;
+}
+/* 7 — danger */
+.menu-container > .circle-button:nth-child(7):hover {
+    background-color: var(--bs-danger);
+    color: white !important;
+}

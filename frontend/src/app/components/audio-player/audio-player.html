@@ -1,0 +1,37 @@
+
+
+<div class="c-card  d-flex flex-column mx-auto my-3 h-100 shadow rounded">
+    
+    <div class="d-flex  justify-content-center h-100">
+        <div class="c-menu d-flex flex-column align-items-center">
+            <button
+                type="button"
+                class="audio-button-primary"
+                (click)="togglePlay()"
+                [disabled]="loading"
+                aria-label="Play or pause audio"
+                >
+
+                <span *ngIf="!isPlaying; else pauseIcon">
+                   <i class="bi bi-play bi-md fs-6"></i>
+                </span>
+
+                <ng-template #pauseIcon>
+                    <i class="bi bi-pause fs-6"></i>
+                </ng-template>
+                
+            </button>
+             <app-transcription-button [audioSpecs]="audio"></app-transcription-button>
+            <app-summarization-button [audioSpecs]="audio"></app-summarization-button>
+            <app-delete-button [audioSpecs]="audio"></app-delete-button>
+        </div>
+    
+       <div class="mx-2 w-100 d-flex flex-column align-items-start align-self-start">
+         <p class=" text-primary m-2">{{ (audio.originalFileName ?? audio.name).split('.')[0] }}</p>
+            <div  #waveform class="waveform w-100"></div>
+       </div>
+    </div>  
+</div>
+
+
+

@@ -1,0 +1,9 @@
+ <button class="btn btn-success w-100 text-white" (click)="checkout()">
+    Modify Subscription
+    <span class="ms-2">
+        <i class="bi bi-cart4"></i>
+    </span>
+</button>
+<div *ngIf="errormessage" class="alert alert-danger mt-2">
+    {{errormessage}}
+</div>

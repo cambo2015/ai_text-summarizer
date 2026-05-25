@@ -1,0 +1,91 @@
+<style>
+  .record-off {
+    width: 50px;
+    height: 50px;
+    /* color: var(--bs-success); */
+    border: none;
+    background: var(--bs-success);
+  }
+
+  .record-off:hover {
+    color: var(--bs-danger);
+    border-radius: 50%;
+    border: none;
+    background: var(--bs-danger);
+  }
+
+  .record-on {
+    width: 50px;
+    height: 50px;
+    color: lightcoral;
+    border: none;
+    background: var(--bs-danger);
+  }
+
+  .text-coral {
+    color: lightcoral;
+    font-size: large;
+  }
+
+  .bg-coral {
+    background-color: lightcoral;
+  }
+</style>
+
+
+
+<!-- MODAL -->
+<div class="modal fade" id="recordModal" tabindex="-1" (hidden.bs.modal)="onHidden()">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white" data-bs-theme="dark">
+        <h5 class="modal-title">Audio Recorder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+       <div *ngIf="!finishedNamingFile && !recording && !loading">
+        <p>Start recording</p>
+      </div>
+        <div *ngIf="!loading && !finishedNamingFile" class="px-4 w-100">
+          <label class="text-primary" for="filename">File Name:</label>
+          <p class="text-small text-muted">Enter the file name before recording</p>
+          <input id="filename" type="text" class="form-control mt-2" placeholder="Enter filename"
+            [(ngModel)]="filename" />
+          <button class="btn btn-primary mt-4 ms-auto d-block" (click)="toggleNamingFile()" [disabled]="!filename">Next
+            <i class="bi bi-arrow-right"></i></button>
+        </div>
+
+        <div *ngIf="finishedNamingFile">
+          <button class="btn btn-primary mt-1 mb-2 me-auto d-block" (click)="toggleNamingFile()"
+            [disabled]="!filename"><i class="bi bi-arrow-left me-1"></i>Back
+          </button>
+          <canvas id="barsCanvas" width="600" height="120" class="bars-canvas">
+          </canvas>
+          <div [ngClass]="{'text-coral':recording,'text-black':!recording}" class="text-coral recording-time">
+            ⏺ {{ formattedDuration }}
+          </div>
+          <div class="controls p-2 d-flex align-items-center justify-content-center">
+            <button class="record-off shadow rounded-circle"
+              [ngClass]="{'record-on': recording,'record-off': !recording}" (click)="toggleRecording()">
+            </button>
+          </div>
+
+          <div class="flex align-items-center justify-content-center  bold">
+            <p class="text-center text-success">{{successMessage}}</p>
+            <p *ngIf="successMessage"><small>This will reset in 5 seconds</small></p>
+            <div *ngIf="errorMessage">
+              <p class="text-danger">{{errorMessage}} <a href="/settings">Subscribe in settings</a></p>
+            </div>
+
+            <div *ngIf="loading" class="d-flex align-items-center justify-content-center">
+              <app-loading-information [text]="'Uploading audio. Please wait...'"
+                color="primary"></app-loading-information>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--  -->

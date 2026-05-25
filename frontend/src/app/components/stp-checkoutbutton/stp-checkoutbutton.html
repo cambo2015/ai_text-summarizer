@@ -1,0 +1,60 @@
+<div class="mb-3">
+
+  <label class="form-label fw-bold">Select Plan</label>
+
+  <div class="form-check">
+    <input 
+      class="form-check-input"
+      type="radio"
+      name="plan"
+      value="starter"
+      [(ngModel)]="plan"
+    >
+    <label class="form-check-label">
+      Starter – $19/month
+    </label>
+  </div>
+
+  <div class="form-check">
+    <input 
+      class="form-check-input"
+      type="radio"
+      name="plan"
+      value="pro"
+      [(ngModel)]="plan"
+    >
+    <label class="form-check-label">
+      Pro – $29/month
+    </label>
+  </div>
+
+  <div class="form-check">
+    <input 
+      class="form-check-input"
+      type="radio"
+      name="plan"
+      value="business"
+      [(ngModel)]="plan"
+    >
+    <label class="form-check-label">
+      Business – $49/month
+    </label>
+  </div>
+
+</div>
+
+<button 
+  class="btn btn-success w-100 text-white"
+  (click)="checkout()"
+  [disabled]="loading"
+>
+  <span *ngIf="!loading">Subscribe</span>
+  <span *ngIf="loading">Processing...</span>
+  <span class="ms-2">
+    <i class="bi bi-cart4"></i>
+  </span>
+</button>
+
+<div *ngIf="errormessage" class="alert alert-danger mt-2">
+  {{errormessage}}
+</div>

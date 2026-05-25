@@ -1,0 +1,25 @@
+
+
+<!-- MODAL -->
+<div class="modal fade" id="youtubeModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Youtube Downloader</h5>
+        <button [disabled]="loading" type="button" class="btn-close" data-bs-dismiss="modal"  data-bs-theme="dark"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+            <input [(ngModel)]="youtubeUrl" type="text" class="form-control my-3" placeholder="Enter YouTube URL">
+            <button class="yt-dl-button" (click)="downloadAudio()" [disabled]="loading">
+              <span *ngIf="loading"><app-spinner size="lg" color="primary"></app-spinner></span>
+              <span *ngIf="!loading"><i class="dl-icon bi bi-download fs-4"></i></span>
+            </button>
+        </div>
+        <p class="text-right p-2">
+            {{ msg }}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,68 @@
+
+
+.grape-logo {
+   background-color: var(--bs-primary);
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 20px auto;
+    border-radius: 50%;
+}
+
+.grape-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;      /* 👈 makes it circular */
+    border: 5px solid var(--bs-primary); /* 👈 visible rim */
+    object-fit: cover;  
+}
+
+.grape-icon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;      /* 👈 makes it circular */
+    border: 5px solid var(--bs-primary); /* 👈 visible rim */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position:relative;
+    top:-50px;
+    border:5px solid var(--bs-primary);
+
+}
+
+
+.bg-image{
+    background-image: url('/img/paint.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-glass{
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+}
+
+.bg-primary-glass{
+    background: rgba(133, 28, 170, 0.5);
+    backdrop-filter: blur(6px);
+}
+
+label,input{
+    /* border:2px solid var(--bs-primary); */
+    background:whitesmoke;
+    border:none;
+    
+    
+}
+
+label{
+    border-right: none;
+    width:130px;
+}
+
+
+input{
+   border-left: none;
+   border-radius: 8px !important;
+   /* border:solid 2px var(--bs-primary); */
+}

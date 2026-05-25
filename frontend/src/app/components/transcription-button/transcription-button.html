@@ -1,0 +1,37 @@
+<div id="transcription-button">
+    <!-- Button trigger modal -->
+  <button type="button" *ngIf="!isLoading"  (click)="clickTranscribeData()" class="audio-button-secondary" data-bs-toggle="modal" [attr.data-bs-target]="'#' + modalId" [disabled]="isLoading">
+    <i class="bi bi-body-text"></i>
+  </button>
+  <div type="button" *ngIf="isLoading">
+    <app-spinner size="sm" color="secondary"></app-spinner>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" [id]="modalId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white " data-bs-theme="dark"> 
+          <h5 class="modal-title " id="exampleModalLabel">Transcript</h5>
+          <button type="button" class="btn-close" style="color:white" data-bs-dismiss="modal" aria-label="Close" [disabled]="isLoading"></button>
+        </div>
+        <div class="modal-body">
+          <div *ngIf="isLoading ==true" class="d-flex align-items-center justify-content-center">
+            <app-loading-information [text]="'Transcribing audio. Please wait...'" color="primary"></app-loading-information  >
+        </div>
+          <p *ngIf="isLoading ==false" style="max-height:60vh;overflow-y:auto">
+              {{transcript}}
+          </p>
+          <p *ngIf="errorText" class="text-danger">
+              {{errorText}}
+          </p>
+        </div>
+        <div class="modal-footer" >
+          <app-common-word-chips [fileName]="audioSpecs?.transcriptionFileName??''"> </app-common-word-chips>
+          <button type="button" class="print-button fs-4" (click)="printText()"><i class="bi bi-printer-fill"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -1,0 +1,10 @@
+<select
+  class="form-select"
+  style="width:200px;"
+  [(ngModel)]="selectedModel"
+  (ngModelChange)="onModelChange($event)"
+>
+  <option *ngFor="let model of models" [value]="model">
+    {{ model }}
+  </option>
+</select>

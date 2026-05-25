@@ -1,0 +1,88 @@
+<!-- PAGE WRAPPER -->
+<div class=" bg-white h-100 container-fluid p-0 d-none d-md-block">
+
+  <!-- <div  class="d-flex align-items-center justify-content-center" style="width:70px;">
+    <div class="logo bg-primary m-2 rounded-circle" style="width:50px; height:50px;"></div>
+  </div> -->
+
+  <div id="sidebar" class=" h-100 d-flex p-2 align-items-center justify-content-center">
+    <!-- SIDEBAR -->
+    <div class="d-flex flex-column h-100 w-100 ">
+      <!-- <div class="mb-auto w-100 ">
+        
+      </div> -->
+     
+      <div class="">
+        <button (click)="select('home')" [class.active]="selectedButton === 'home'" routerLink="/dashboard" id="home"
+          type="button" class=" c-menu-button-primary d-flex align-items-center justify-content-center px-2"
+          title="Home" data-bs-placement="right">
+          <i class="bi bi-house-fill fs-6"></i>
+        </button>
+      </div>
+
+
+      <div>
+        <button (click)="select('record')" [class.active]="selectedButton === 'record'" id="recordButton" type="button"
+          class=" c-menu-button-primary d-flex align-items-center justify-content-center px-2" data-bs-toggle="modal"
+          data-bs-target="#recordModal" title="Record" data-bs-placement="right">
+          <i class="bi bi-mic-fill fs-6"></i>
+
+        </button>
+
+      </div>
+
+      <div>
+        <button (click)="select('customTemplate')" [class.active]="selectedButton === 'customTemplate'"
+          id="customTemplateButton" type="button"
+          class=" c-menu-button-primary d-flex align-items-center justify-content-center px-2 " title="Custom Template"
+          data-bs-toggle="modal" data-bs-target="#customTemplateModal" data-bs-placement="right">
+          <i class="bi bi-file-earmark-text fs-6"></i>
+
+        </button>
+      </div>
+
+      <div>
+        <button (click)="select('upload')" [class.active]="selectedButton === 'upload'" id="uploadButton" type="button"
+          class=" c-menu-button-primary d-flex align-items-center justify-content-center p-2" title="Upload"
+          data-bs-toggle="modal" data-bs-target="#uploadModal" data-bs-placement="right">
+          <i class="bi bi-cloud-arrow-up-fill fs-6"></i>
+
+        </button>
+      </div>
+
+      <!-- settings -->
+      <div class="dropdown mt-auto dash-nav">
+        <button (click)="select('settings')" [class.active]="selectedButton === 'settings'" id="settings-button"
+          type="button"
+          class=" c-menu-button-primary dropdown-toggle d-flex align-items-center justify-content-center p-2 mt-auto"
+          data-bs-toggle="dropdown" aria-expanded="false" title="Settings" data-bs-placement="right">
+
+          <i class="bi bi-gear-fill fs-6"></i>
+
+        </button>
+
+        <ul class="dropdown-menu shadow">
+          <li>
+            <button class="dropdown-item" (click)="logout()">
+              <i class="bi bi-door-closed-fill text-secondary"></i>
+              Signout
+            </button>
+          </li>
+          <li>
+            <a class="dropdown-item" href="/settings">
+              <i class="bi bi-gear-fill text-danger"></i>
+              Settings
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<app-recorder (modalClosed)="selectedButton = 'home'"></app-recorder>
+<app-custom-summary-template (modalClosed)="selectedButton = 'home'"></app-custom-summary-template>
+<app-upload-audio (modalClosed)="selectedButton = 'home'"></app-upload-audio>

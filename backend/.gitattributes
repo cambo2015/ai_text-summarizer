@@ -1,0 +1,7 @@
+/mvnw text eol=lf
+*.cmd text eol=crlf
+vault-data
+.env
+.env.prod
+localhost+1.pem
+localhost+1-key.pem

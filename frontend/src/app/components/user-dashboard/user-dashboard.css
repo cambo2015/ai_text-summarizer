@@ -1,0 +1,79 @@
+
+
+#dash-container{
+  margin-left: 0px;
+}
+
+#audio-file-container {
+  margin-left: 0;
+  height: calc(90vh - 40px) !important;
+  
+  overflow: visible;          
+  margin-top:10px;
+  margin-bottom:20px;
+  /* margin-left:150px; */
+  background:white !important;
+}
+
+.top-spacer {
+  height: 150px;
+  background-image: url('/img/paint.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position-y: -600px;
+  margin-top: calc(8px * 5);
+  max-height:150px;
+  margin:0;
+  /* background-color: var(--bs-info); */
+}
+
+@media (max-width: 500px) {
+  .top-spacer {
+    height: 150px;
+    background-image: url('/img/paint.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: -100px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .top-spacer {
+    height: 150px;
+    background-image: url('/img/paint.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: -150px !important;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  .top-spacer {
+    height: 350px;
+    background-image: url('/img/paint.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: -60px;
+  }
+  #audio-file-container{
+    margin-left: 0px;
+    margin:8px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .top-spacer {
+    background-position-y: -250px;
+  }
+}
+
+
+/* .bg-image {
+  background-image: url('/img/paint.jpg');
+  background-size: cover;
+  
+  background-repeat: no-repeat;
+  background-position-y: -600px;
+} */

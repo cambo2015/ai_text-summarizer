@@ -1,0 +1,111 @@
+/* =========================================
+   1️⃣ Sass module imports (MUST BE FIRST)
+========================================= */
+@use '@angular/material' as mat;
+
+/* =========================================
+   2️⃣ Bootstrap SCSS variable overrides
+   (must come BEFORE Bootstrap import)
+========================================= */
+// $primary: #314022;
+// $secondary: #30362B;
+// $success: #4a6b3c;
+
+// $body-bg: #ffffff;
+// $body-color: #1f2937;
+
+/* =========================================
+   3️⃣ Import Bootstrap SCSS
+========================================= */
+// $white: #ffffff;
+// $secondary: #00bad5;
+// $primary: #851caa;
+// $success: #3c963f;
+// // $info: #00bad5;
+// $warning: #FFC482;
+// $danger: #e91e63;
+// $light: #ddf2fa;
+// $dark: #00060b;
+// $enable-dark-mode: true;
+// $color-mode-type: data;
+
+// $white:     #ffffff;
+
+// $primary:   #7853bc;  // rich violet (brand anchor)
+// $secondary: #5dabee;  // calm cyan / aqua
+// $success:   #08c977;  // grounded emerald green
+// $info:      #00A6C4;  // matches secondary
+// $warning:   #FFB454;  // warm amber
+// $danger:    #ff1c72;  // raspberry-rose (fun, not neon)
+
+// $light:     #E6F4FA;  // soft airy light
+// $dark:      #020617;  // blue-black, premium
+
+
+$white:     #fff;
+
+/* Brand anchor — deep royal purple */
+$primary:   #5b2aa8;  // deep royal purple (anchor)
+
+/* Cool accent — blue-leaning cyan (plays well with purple) */
+$secondary: #49B6FF;  // softened cyan-blue
+
+/* Success — emerald with cooler undertone */
+$success:   #1dc984;  // refined emerald (less neon)
+
+/* Info — teal-blue, between secondary & success */
+$info:      #49B6FF;  // modern teal
+
+/* Warning — amber with slight warmth (still readable on dark) */
+$warning:   #f2b366;  // golden amber
+
+/* Danger — magenta-berry (purple-adjacent, not pinky) */
+$danger:    #FF3366;  // berry magenta
+
+/* Surfaces */
+$light:     #1a1630;  // darkened lavender-slate (for cards in dark mode)
+$dark:      #020617;  // blue-black, premium
+$muted:     #acacac; // versatile gray for text and borders
+$gray:      #acacac; // neutral gray for backgrounds and borders
+
+$pagination-border-color: #5b2aa8;
+
+// $pagination-hover-color: #fff;
+$pagination-hover-bg: #5b2aa8;
+$pagination-hover-border-color: #5b2aa8;
+$pagination-hover-color: white;
+
+$pagination-active-bg: #5b2aa8;
+$pagination-active-border-color: #5b2aa8;
+
+$pagination-disabled-color: white;
+$pagination-disabled-bg: lighten(#5b2aa8, 50%);
+
+@import "bootstrap/scss/bootstrap";
+@import "driver.js/dist/driver.css";
+
+
+/* =========================================
+   4️⃣ Angular Material theming
+========================================= */
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$azure-palette,
+      tertiary: mat.$blue-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: light;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+}
+
+
+

@@ -1,0 +1,389 @@
+package com.aisummarizer.website.services;
+
+import com.aisummarizer.website.config.MY_PROPERTIES;
+import com.aisummarizer.website.dao.AudioFileRepository;
+import com.aisummarizer.website.dao.LLMInstructionRepository;
+import com.aisummarizer.website.dao.TranscriptionJobRepository;
+import com.aisummarizer.website.entities.*;
+import lombok.Getter;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
+import java.util.Objects;
+import java.util.UUID;
+
+/**
+ * Handles file system persistence for generated artifacts
+ * such as transcripts and summaries.
+ */
+@Service
+@Getter
+public class FileService {
+
+    private final UserService userService;
+    private final FileEncrypterDecrypterService  fileEncrypterDecrypterService;
+    private final Path STORAGE_ROOT;
+    private final Path SUMMARY_DIR;
+    private final Path LLM_INSTRUCTIONS_DIR;
+    private final Path AUDIO_DIR;
+    private final Path PYTHON_DIR;
+    private final Path TRANSCRIPTS_DIR;
+
+    /**
+     * Saves content to a file, creating directories if needed.
+     *
+     * @param outputFile the file path to write to
+     * @param content    the content to save
+     * @return the written file path
+     */
+    /**
+     * Saves text content to a file.
+     * Creates parent directories if they do not exist.
+     *
+     * @param filePath the destination file
+     * @param content  the content to write
+     * @return the written file path
+     */
+
+    MY_PROPERTIES myProperties;
+    public FileService(MY_PROPERTIES myProperties, UserService userService,FileEncrypterDecrypterService fileEncrypterDecrypterService) {
+        this.myProperties = myProperties;
+
+        this.STORAGE_ROOT = myProperties.getStorageRoot();
+
+        this.SUMMARY_DIR= myProperties.getSummaryDir().normalize();
+        this.LLM_INSTRUCTIONS_DIR = myProperties.getLlmInstructionsDir().normalize();
+        this.AUDIO_DIR = myProperties.getAudioDir().normalize();
+        this.PYTHON_DIR = myProperties.getPythonDir().normalize();
+        this.TRANSCRIPTS_DIR = myProperties.getTranscriptsDir().normalize();
+
+        this.userService = userService;
+        this.fileEncrypterDecrypterService = fileEncrypterDecrypterService;
+    }
+    public Path saveToFile(Path filePath, String content) {
+        System.out.println(filePath.toString());
+        try {
+            Files.createDirectories(filePath.getParent());
+
+            Files.writeString(
+                    filePath,
+                    content,
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING
+            );
+
+            return filePath;
+        } catch (IOException e) {
+            System.out.println("Unable to save file:"+e.getMessage());
+            throw new RuntimeException(
+                    "1. Failed to write file: " + filePath, e);
+        }
+        catch(Exception e){
+            System.out.println("Unable to save file:"+e.getMessage());
+            throw new RuntimeException("2. Failed to write to file");
+        }
+    }
+
+
+    ///
+    /// <p>Gets size of file in bytes</p>
+    public long getFileSize(Path p) throws IOException {
+        return Files.size(p);
+    }
+
+    /// gets file size from multipart file
+    public long getFileSize(MultipartFile multipartFile){
+        return multipartFile.getSize();
+    }
+
+
+
+    public Path getTranscriptPath(UUID jobId) {
+//        return Paths.get("./transcripts")
+        return TRANSCRIPTS_DIR
+                .normalize()
+                .resolve(jobId + ".txt");
+    }
+
+    public Path saveTranscriptionFile(UUID jobId, String content) {
+        Path file = getTranscriptPath(jobId);
+        return saveToFile(file, content);
+    }
+
+    public boolean saveAudioFile(MultipartFile file,String newFileName) {
+
+        try{
+            Path uploadDirectory = this.AUDIO_DIR;
+            Files.createDirectories(uploadDirectory);
+
+            Path filePath = uploadDirectory.resolve(newFileName);
+
+            Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+            return true;
+        }
+        catch (IOException e) {
+            System.out.println("(saveAudioFile 1.)Failed to write file: " + file.getOriginalFilename());
+            return false;
+        }
+    }
+
+    public String readFile(Path file) {
+        try {
+            return Files.readString(file);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to read file: " + file, e);
+        }
+    }
+
+    public String getFileName(String fullPath){
+       return Paths.get(fullPath).getFileName().toString();
+    }
+
+
+    /**
+     * Saves a summary file to ./summary/{jobId}.txt
+     *
+     * @param jobId       Job identifier
+     * @param summaryText Summary text generated by the LLM
+     * @return Path to the saved summary file
+     */
+    public Path saveSummary(UUID jobId, String summaryText) {
+        try {
+            // Ensure summary directory exists
+            Files.createDirectories(SUMMARY_DIR);
+
+            Path summaryFile = SUMMARY_DIR.resolve(jobId + ".txt");
+
+            Files.writeString(summaryFile, summaryText,StandardCharsets.UTF_8);
+
+            return summaryFile;
+
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to save summary file", e);
+        }
+    }
+
+    public String readSummary(UUID jobId) throws IOException{
+        Path summaryFile = SUMMARY_DIR.resolve(jobId + ".txt").normalize();
+
+        if(!Files.exists(summaryFile)){
+            throw new NoSuchFileException(summaryFile.toString());
+        }
+        return Files.readString(summaryFile,StandardCharsets.UTF_8);
+    }
+
+    public String readSummary(String fileName) throws IOException {
+//        Path dir = Paths.get("").toAbsolutePath().resolve("summary").normalize();
+
+        Path summaryFile = SUMMARY_DIR.resolve(fileName).normalize();
+
+        if (!Files.exists(summaryFile)) {
+            throw new NoSuchFileException(fileName);
+        }
+
+        return Files.readString(summaryFile, StandardCharsets.UTF_8);
+    }
+
+
+    public  String getExtension(String filename) {
+        if (!StringUtils.hasText(filename)) return null;
+        int dot = filename.lastIndexOf('.');
+        if (dot < 0 || dot == filename.length() - 1) return null;
+        return filename.substring(dot + 1).toLowerCase();
+    }
+
+    public  String inferExtension(String contentType) {
+        if (contentType == null) return null;
+        return switch (contentType) {
+            case "audio/wav", "audio/x-wav" -> "wav";
+            case "audio/mpeg" -> "mp3";
+            case "audio/ogg" -> "ogg";
+            case "audio/webm" -> "webm";
+            case "audio/mp4" -> "m4a";
+            case "audio/aac" -> "aac";
+            default -> null;
+        };
+    }
+
+    public  String safePath(String path) {
+        return path == null ? "" : path.replace("\\", "/");
+    }
+
+    public boolean deleteFile(Path path){
+        try{
+            Files.delete(path);
+            return true;
+        }
+        catch(Exception e){
+            System.out.println("Failed to delete file: " + path);
+            return false;
+        }
+    }
+
+    public boolean fileExists(Path path){
+        return Files.exists(path);
+    }
+
+    public boolean llmInstructionsAlreadyExist(String fileName,LLMInstructionRepository llmInstructionRepository){
+        LLMInstructionEntity entity =  llmInstructionRepository.findByFileName(fileName).orElse(null);
+        return entity != null;
+    }
+
+    public boolean saveLLMCustomInstructions(String text, LLMInstructionRepository llmRepo){
+        if(llmRepo == null)  throw new RuntimeException("llmRepo is null");
+        try {
+//            create the file name
+            String userId = userService.getCurrentUser().getId().toString();
+            if(userId.isBlank()){
+                throw new RuntimeException("Current user is not logged in");
+                //return false;
+            }
+            String fileName = userId + ".txt";
+
+            Path p = LLM_INSTRUCTIONS_DIR.resolve(fileName).toAbsolutePath().normalize();
+            //            make a LLMInstructionEntity and save it
+
+            //encrypt the text
+            String encryptedText = fileEncrypterDecrypterService.encrypt(text);
+            if(!llmInstructionsAlreadyExist(fileName,llmRepo)){
+                //save to database
+                LLMInstructionEntity instructionEntity = new LLMInstructionEntity();
+                instructionEntity.setFileName(fileName);
+                instructionEntity.setOwnerId(Long.parseLong(userId));
+                llmRepo.save(instructionEntity);
+            }
+            saveToFile(p, encryptedText);
+
+            return true;
+        }catch(Exception e){
+            throw  new RuntimeException("Failed to save LLM instructions file", e);
+        }
+    }
+
+    public String getLLMCustomInstructions(){
+        try{
+            String userId = userService.getCurrentUser().getId().toString();
+            if(userId.isBlank()){
+                throw new RuntimeException("getLLMCustomInstruction 1. Current user is not logged in");
+            }
+            Path p =  LLM_INSTRUCTIONS_DIR.resolve(userId + ".txt").normalize();
+            String encryptedText =  readFile(p);
+            return fileEncrypterDecrypterService.decrypt(encryptedText);
+        }
+        catch(Exception e){
+            System.out.print("Failed to get custom text: "+e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean llmCustomFileExists(){
+        String userId = userService.getCurrentUser().getId().toString();
+        Path p = LLM_INSTRUCTIONS_DIR.resolve(userId+".txt").normalize();
+        return fileExists(p);
+    }
+
+    public boolean isOwnerOfFileTranscriptionJob(JobArtifactEntity artEntity, TranscriptionJobRepository transcriptionJobRepository){
+        //get audio file name
+
+        AppUser user = userService.getCurrentUser();
+        System.out.println("isOwnerOfFileTranscriptionJob 1. userId: "+user.getId());
+
+        Path p = Path.of(artEntity.getPath()).toAbsolutePath().normalize();
+        //using the artEntity.getPath get the  name of the file and search audio file name
+        TranscriptionJobEntity tjEntity = transcriptionJobRepository.findByTranscriptFileName(p.getFileName().toString()).orElse(null);
+
+        if(tjEntity != null){
+            System.out.println("isOwnerOfFileTranscriptionJob 3.: transcriptionFile owner:"+ tjEntity.getOwnerId());
+            return Objects.equals(user.getId(), tjEntity.getOwnerId());
+        }
+        System.out.println("isOwnerOfFileTranscriptionJob 4.: transcriptionFile not found");
+        return false;
+    }
+
+
+    public boolean isOwnerOfAudioFile(String audioFileName, AudioFileRepository audioFileRepository){
+        AppUser user = userService.getCurrentUser();
+        if(user == null) return false;
+        //get transcriptionJob
+        AudioFileEntity afEntity = audioFileRepository.findByFileName(audioFileName).orElse(null);
+        if(afEntity != null){
+            return Objects.equals(user.getId(), afEntity.getOwnerId());
+        }
+        return false;
+    }
+
+    public boolean isOwnerOfAudioFile(
+            String audioFileName,
+            Long userId,
+            AudioFileRepository audioFileRepository
+    ) {
+        AudioFileEntity afEntity =
+                audioFileRepository.findByFileName(audioFileName).orElse(null);
+
+        return afEntity != null && Objects.equals(userId, afEntity.getOwnerId());
+    }
+
+    public boolean isOwnerOfLLMInstructionFile(LLMInstructionRepository llmRepo){
+        String userId = userService.getCurrentUser().getId().toString();
+        LLMInstructionEntity entity =  llmRepo.findByOwnerId(Long.parseLong(userId)).orElse(null);
+        if(entity == null){
+            System.out.println("isOwnerOfLLMInstructionFile 1. LLM instructions file was not found.");
+            return false;
+        }
+        if(entity.getOwnerId().equals(Long.parseLong(userId))) return true;
+        System.out.println("isOwnerOfLLMInstructionFile 2. Current user does not own the file");
+        return false;
+    }
+
+    public boolean llmInstructionFileExists(LLMInstructionRepository llmRepo){
+        String userId = userService.getCurrentUser().getId().toString();
+        LLMInstructionEntity entity =  llmRepo.findByOwnerId(Long.parseLong(userId)).orElse(null);
+        return entity != null;
+    }
+
+    public boolean isOwnerOfSummaryFile(String fileName,TranscriptionJobRepository transcriptionJobRepository){
+        String userId = userService.getCurrentUser().getId().toString();
+        Path p = SUMMARY_DIR.resolve(fileName).toAbsolutePath().normalize();
+       TranscriptionJobEntity tj =  transcriptionJobRepository.findBySummaryFileName(p.getFileName().toString()).orElse(null);
+       if(tj == null){
+           return false;
+       }
+        return tj.getOwnerId().equals(Long.parseLong(userId));
+    }
+
+    public double getAudioDurationInHours(Path filePath) throws IOException, InterruptedException {
+
+        ProcessBuilder pb = new ProcessBuilder(
+                "ffprobe",
+                "-v", "error",
+                "-show_entries", "format=duration",
+                "-of", "default=noprint_wrappers=1:nokey=1",
+                filePath.toAbsolutePath().toString()
+        );
+
+        pb.redirectErrorStream(true);
+
+        Process process = pb.start();
+
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))) {
+
+            String output = reader.readLine();
+            process.waitFor();
+
+            if (output != null) {
+                return Double.parseDouble(output) / 3600.0;
+            }
+        }
+
+        return 0.0;
+    }
+
+}
+

@@ -1,0 +1,18 @@
+
+#transcription-button{
+    max-height: 100px !important;
+}
+.print-button {
+    background-color: white;
+    border: none;
+    color:var(--primary-color);
+    padding:8px;
+}
+
+.print-button:hover {
+    padding: 8px;
+    background-color: var(--primary-color);
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}

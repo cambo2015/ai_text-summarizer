@@ -1,0 +1,297 @@
+
+
+#custom-nav{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  z-index:1000;
+  color:white ;
+}
+#custom-nav ul li{
+  text-decoration: none;
+  list-style-type: none;
+}
+
+#custom-nav a{
+  text-decoration: none;
+  color:white ;
+}
+
+#custom-nav .logo{
+  width:10em;
+  height:10em;
+  padding-left: 8px;
+  color:white;
+}
+
+#custom-nav p{
+  text-transform: capitalize;
+}
+
+/* Hero section */
+#custom-hero {
+  background-image: url("/img/paint.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+
+  padding-block: clamp(8rem, 18vw, 16rem);
+  overflow: hidden; /* protects edges */
+  height:100vh;
+}
+
+
+
+.hero-content {
+  position: relative;
+  display: grid;
+  place-items: center;
+  z-index: 1;
+}
+
+
+.hero-text {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 10rem); /* ← increase this */
+}
+
+.custom-title-color{
+  color: var(--primary-color) !important;
+}
+
+#services{
+  background-color: var(--primary-color);
+}
+
+/* container for the cards */
+#services #service-cards{
+  max-width:1200px;
+  margin:auto;
+}
+
+/* edit a single card */
+#services .custom-card{
+  border-radius: 100px;
+  height: clamp(50%, 100%, 100%);
+  border-radius: 50px;
+  overflow: hidden; /* important */
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-image {
+  display: block;      /* ← critical */
+  width: clamp(50%, 100%, 100%);
+ 
+  object-fit: cover;
+}
+
+.text-secondary{
+  color: var(--secondary-color) !important;
+}
+
+.text-third{
+  color: var(--third-color) !important;
+}
+
+.custom-text-bold{
+  font-weight: bold !important;
+}
+
+.huge-text {
+  font-size: clamp(5rem, 25vw, 20rem);
+  line-height: 1;
+  white-space: nowrap;
+  font-weight: 900;
+}
+
+.vertical-text {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  transform:
+    translate(-50%, -50%) /* center reference */
+    /* max value -30rem */
+    /* min -4rem */
+    translateX(clamp(-30rem,-35vw,-4rem)) 
+
+    rotate(180deg);
+
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  font-size: clamp(2rem, 6vw, 6rem);
+  white-space: nowrap;
+  font-weight: 700;
+}
+
+.super-bold{
+  font-weight: 900 !important;
+}
+
+.capatilize{
+  text-transform: capitalize !important;
+}
+
+.primary-background{
+  background-color: var(--primary-color);
+}
+
+.left-nav{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap:10px;
+  height: 100%;
+  font-size: 50%;
+  font-weight: bolder;
+  color:white;
+}
+
+.logo-text{
+  padding-top: 10px;
+  font-size: 3em;
+  font-weight: 300;
+  color:white;
+}
+
+.bullited-list li{
+  text-align: left;
+  margin-bottom: 8px;
+  list-style-type: disc;
+}
+
+.hero-margin{
+  margin-left: clamp(1rem, 5vw, 5rem);
+}
+
+.custom-card .circle{
+  border-radius: 50px;
+  height: clamp(50%, 100%, 100%);
+  background-color: var(--primary-color );
+}
+
+.top-shadow {
+  /* box-shadow: h-offset v-offset blur spread color; */
+  box-shadow: 0 -8px 6px -6px #000;
+}
+
+
+.signup-img{
+  width:30em;
+  height:30em;
+  object-fit: cover;
+}
+
+.shadow-inner {
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+@media (max-width: 600px) {
+  /* Nav  */
+ .mobile-nav button{
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin-left: 1rem;
+  }
+
+  .mobile-nav button:active{
+    background-color: var(--primary-color);
+    color:white;
+  }
+
+  .mobile-menu-open{
+    transition: height 0.3s ease-in-out, font-size 0.3s ease-in-out;
+    width:100vw;
+    height:100vh;
+    position:fixed;
+    z-index: 2;
+    top:0;
+    left:0;
+    background: url("/img/alphabeta-hero.jpg"); 
+    background-position: center ;
+    background-size: cover; 
+    font-size: large;
+    
+   
+  }
+
+
+  .mobile-menu-close{
+    transition: height 0.3s ease-in-out, font-size 0.3s ease-in-out;
+    width:100vw;
+    height:0vh;
+    overflow:hidden;
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:2;
+    background: url("/img/alphabeta-hero.jpg"); 
+    background-position: center ;
+    background-size: cover; 
+    font-size: 0pt;
+  }
+
+  .mobile-nav-overlay-open{
+    /* position:relative; */
+    transition: font-size 0.5s ease-in-out;
+    width:100vw;
+    height:100vh;
+    object-fit: cover;
+    top:0;
+    left:0;
+    z-index:3;
+    backdrop-filter:opacity(100%) blur(8px);
+    color:black !important;
+    overflow: hidden;
+    
+}
+
+.mobile-nav-overlay-closed{
+/* position:relative; */
+    transition: font-size 0.5s ease-in-out; 
+    width:100vw;
+    height:100vh;
+    object-fit: cover;
+    top:0;
+    left:0;
+    z-index:3;
+    backdrop-filter:opacity(100%) blur(8px);
+    color:black !important;
+    overflow: hidden;
+    font-size: 0pt;
+    
+}
+
+.mobile-nav-overlay a{
+  color:black;
+  font-size: large;
+  font-weight: bold;
+}
+
+.mobile-nav-overlay a:active{
+  text-decoration: underline;
+  color:white;
+}
+
+  .basic-margin{
+     padding-left: clamp(1rem, 5vw, 5rem);
+  }
+
+  .mobile-nav .logo-pos{
+    top: 50%;
+    right: 30px;
+  }
+}

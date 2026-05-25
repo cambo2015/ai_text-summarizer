@@ -1,0 +1,14 @@
+<div class="common-word-chips d-flex flex-wrap gap-2">
+  <span
+    *ngFor="let word of commonWords; let i = index"
+    class="badge rounded-pill word-chip"
+    [ngClass]="getColor(i)"
+  >
+    {{ word }}
+  </span>
+</div>
+
+<!-- Optional empty state -->
+<div *ngIf="commonWords.length === 0" class="text-muted small">
+  No common words found
+</div>

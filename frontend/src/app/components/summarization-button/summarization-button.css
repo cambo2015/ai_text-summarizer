@@ -1,0 +1,7 @@
+
+
+.summary-text {
+  white-space: pre-wrap;   /* 🔑 preserves \n */
+  max-height:500px;
+  overflow-y: auto;
+}

@@ -1,0 +1,37 @@
+
+
+<div class="menu-container d-md-none"  
+  [class.open]="open"
+  (click)="toggleMenu()">
+    <button 
+    class="circle-button shadow text-primary"  
+    type="button"
+    routerLink="/home"
+    (click)="$event.stopPropagation()">
+        <i class="bi bi-house-fill fs-5 "></i>
+    </button>
+    <button class="circle-button shadow text-secondary" data-bs-toggle="modal" data-bs-target="#recordModal">
+        <i class="bi bi-mic-fill fs-5"></i>
+    </button>
+      <!-- <button class="circle-button shadow text-success" data-bs-toggle="modal" data-bs-target="#youtubeModal">
+          <i class="bi bi-youtube fs-5"></i>
+    </button> -->
+      <button class="circle-button shadow text-danger" data-bs-toggle="modal" data-bs-target="#customTemplateModal">
+        <i class="bi bi-file-earmark-text fs-5"></i>
+    </button>
+      <button class="circle-button shadow text-secondary" data-bs-toggle="modal" data-bs-target="#uploadModal">
+        <i class="bi bi-cloud-arrow-up-fill fs-5 "></i>
+    </button>
+    <button class="circle-button shadow text-success" (click)="logout()">
+        <i class="bi bi-door-closed-fill "></i>
+    </button>
+    <button class="circle-button shadow text-danger" title="Settings" data-bs-toggle="dropdown" aria-expanded="false" type="button"
+    routerLink="/settings"
+    (click)="$event.stopPropagation()">
+        <i class="bi bi-gear-fill fs-5"></i>
+    </button>
+    <button id="mobile-menu-button" class="circle-button shadow text-primary"  onclick="toggleMenu()"><i class="bi bi-plus fs-3" ></i></button>
+</div>
+
+
+

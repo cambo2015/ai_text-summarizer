@@ -1,0 +1,7 @@
+.c-card{
+    border-radius: 16px;
+    background-color:  var(--bs-white);
+    height:155px !important;
+}
+
+
