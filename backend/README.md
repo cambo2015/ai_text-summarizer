@@ -7,19 +7,19 @@ To get started:
 1. clone this repository 
 2. create the localhost+1.pem file ``` mkcert localhost 127.0.0.1 ::1 ``` in the /backend root directory
 3. create the localhost+1-key.pem file.
-3. You may need to rename the .pem files. 
+4. You may need to rename the .pem files. 
 Make sure they are named the same names as the file above or 
 you will have to change the application.properties file.
-4. create keystore.p12 file by running this command ```bash
+5. create keystore.p12 file by running this command ```bash
 openssl pkcs12 -export \
 -out keystore.p12 \
 -inkey localhost+1-key.pem \
 -in localhost+1.pem \
 -name tomcat ```
-5. Create 3 subscription tiers with metered overage usage using Stripe and put the price_id's in the .env.prod file
-5. You must have Docker installed.
-6. Add necessary env variables to .env.prod file
-7. run ``` docker compose --env-file .env.prod up --build ``` in the terminal.
+6. Create 3 subscription tiers with metered overage usage using Stripe and put the price_id's in the .env.prod file
+7. You must have Docker installed.
+8. Add necessary env variables to .env.prod file
+9. run ``` docker compose --env-file .env.prod up --build ``` in the terminal.
 
 ## ENV VARS NEEDED
 
