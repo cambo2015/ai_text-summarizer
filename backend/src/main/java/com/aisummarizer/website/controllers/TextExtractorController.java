@@ -66,7 +66,6 @@ public class TextExtractorController {
         this.fileService = fileService;
         this.userService = userService;
         this.fileEncrypterDecrypterService = fileEncrypterDecrypterService;
-
     }
 
     /**
@@ -123,7 +122,7 @@ public class TextExtractorController {
         AppUser user = userService.getCurrentUser();
         String userStripeUserId = user.getStripeCustomerId();
         boolean isSubscribed = user.getSubscribed();
-        textExtractorService.extractText(job.getId(), whisperType,isSubscribed,userStripeUserId,user.getId());//if you want to use offline change whispertype  to INTERNET
+        textExtractorService.extractText(job.getId(), whisperType,isSubscribed,userStripeUserId,user.getId());//if you want to use offline change whispertype
 
         //return result
         return ResponseEntity.accepted()

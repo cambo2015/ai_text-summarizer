@@ -24,10 +24,6 @@ export class TranscriptionButton {
 
   constructor(private http: HttpClient, private transcriptionService: TranscriptionService, private zone: NgZone) { }
 
-  ngOnInit() {
-    // check to see if there is a transcription
-    // console.log(this.audioSpecs);
-  }
 
   connect(
     jobId: string,
@@ -71,6 +67,9 @@ export class TranscriptionButton {
           // console.log('Transcript received:', transcript);
           this.transcript = transcript;
           this.isLoading = false;
+          if(this.audioSpecs){
+            this.audioSpecs.transcriptionFileName = jobId + '.txt'
+          }
         },
         error: (error) => {
           // console.error('Error fetching transcript:', error);
@@ -101,6 +100,7 @@ export class TranscriptionButton {
             //subscribe to the events
             if(this.audioSpecs){
               this.audioSpecs.id = response.jobId;
+              this.audioSpecs.transcriptionFileName = response.jobId + '.txt';
             }
             this.connect(
               response.jobId,
@@ -156,6 +156,4 @@ export class TranscriptionButton {
 
    newWindow.print();
   }
-
-  
 }

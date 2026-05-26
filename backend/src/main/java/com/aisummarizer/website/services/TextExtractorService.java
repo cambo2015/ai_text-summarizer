@@ -12,9 +12,9 @@ import com.stripe.exception.StripeException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -46,6 +46,7 @@ public class TextExtractorService {
     private final UserService userService;
     private final FileService fileService;
     private final StripeService stripeService;
+    private final FileEncrypterDecrypterService fileEncrypterDecrypterService;
 
     public TextExtractorService(
             TranscriptionJobRepository jobRepository,
@@ -55,7 +56,7 @@ public class TextExtractorService {
             JobSseEmitterStore sse,
             UserService userService,
             FileService fileService,
-            StripeService stripeService) {
+            StripeService stripeService, FileEncrypterDecrypterService fileEncrypterDecrypterService) {
         this.transcriptionJobRepository = jobRepository;
         this.mainJobRepository = mainJobRepository;
         this.artifactRepository = artifactRepository;
@@ -64,6 +65,7 @@ public class TextExtractorService {
         this.userService = userService;
         this.fileService = fileService;
         this.stripeService = stripeService;
+        this.fileEncrypterDecrypterService = fileEncrypterDecrypterService;
     }
 
     @Async("whisperExecutor")
@@ -89,6 +91,11 @@ public class TextExtractorService {
 
             sse.send(jobId.toString(), "Running Whisper…");
 
+            Path audioPath = Path.of(transcriptionJobEntity.getAudioPath());
+            System.out.println("Audio path: " + audioPath.toAbsolutePath());
+            System.out.println("Audio exists: " + Files.exists(audioPath));
+            System.out.println("Audio size: " + Files.size(audioPath));
+            System.out.println("Whisper type: " + whisperType);
             // Whisper
             Path transcriptPath = whisper.extract(
                     Path.of(transcriptionJobEntity.getAudioPath()),
@@ -135,7 +142,7 @@ public class TextExtractorService {
                     }
                 } catch (IOException | InterruptedException | StripeException e) {
                     System.out.println("SummaryJobService summarize() 1. Could not report the stripe usage.See below message:");
-                    System.out.println(e.getMessage());
+                    e.printStackTrace();
                 }
             }
             transcriptionJobRepository.save(transcriptionJobEntity);
@@ -158,6 +165,7 @@ public class TextExtractorService {
 
             sse.send(jobId.toString(), "Failed: " + e.getMessage());
             sse.complete(jobId.toString());
+            e.printStackTrace();
         }
     }
 
@@ -167,13 +175,11 @@ public class TextExtractorService {
            int top
     ) {
         try{
-//            Path projectRoot = Paths.get(System.getProperty("user.dir"));
-//            Path pythonScript = projectRoot.resolve("python").resolve("freqWords.py");
-//            Path transcriptionFile = projectRoot.resolve("transcripts").resolve(transcriptionFileName);
-
             Path pythonScript = fileService.getPYTHON_DIR().resolve("freqWords.py");
             Path transcriptionFile = fileService.getTRANSCRIPTS_DIR().resolve(transcriptionFileName);
 
+            String encryptedText = Files.readString(transcriptionFile, StandardCharsets.UTF_8);
+            String decryptedText = fileEncrypterDecrypterService.decrypt(encryptedText);
             ProcessBuilder pb = new ProcessBuilder(
                     "python",
                     pythonScript.toAbsolutePath().toString(),
@@ -181,10 +187,16 @@ public class TextExtractorService {
                     String.valueOf(top)
             );
 
-            pb.redirectInput(transcriptionFile.toFile()); // 👈 stdin
+
             pb.redirectErrorStream(true);
 
             Process process = pb.start();
+
+            try(BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(process.getOutputStream(),StandardCharsets.UTF_8))){
+                writer.write(decryptedText);
+                writer.flush();
+            }
 
             List<String> outputLines = new ArrayList<>();
 
@@ -196,6 +208,7 @@ public class TextExtractorService {
             }
 
             int exitCode = process.waitFor();
+
             if(exitCode != 0){
                 return CompletableFuture.failedFuture(new RuntimeException("(1) Python process exited with code "+exitCode));
             }
@@ -205,7 +218,6 @@ public class TextExtractorService {
             System.out.println("(2) Failed to get the most common words"+e.getMessage());
             return CompletableFuture.failedFuture(e);
         }
-
     }
 }
 

@@ -12,6 +12,7 @@ public class AISummarizerWebsiteApplication {
 
 		Dotenv dotenv = Dotenv.configure()
 				.ignoreIfMissing()
+				.filename(".env")
 				.load();
 
 		dotenv.entries().forEach(e ->

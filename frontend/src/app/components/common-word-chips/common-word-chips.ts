@@ -11,7 +11,7 @@ import { NgClass, NgFor, NgIf } from '@angular/common';
 export class CommonWordChips {
 
 
-  @Input() fileName: string = "";
+  private _fileName = ''
   public commonWords: string[] = [];
   readonly chipColors = [
   'bg-primary',
@@ -21,11 +21,21 @@ export class CommonWordChips {
   // "bg-info",
 ];
 
-  constructor(private transcriptionService: TranscriptionService) { }
+  @Input()
+set fileName(value: string) {
+  this._fileName = value;
 
-  ngOnInit() {
+  if (value) {
     this.getCommonWords();
   }
+}
+
+get fileName() {
+  return this._fileName;
+}
+
+  constructor(private transcriptionService: TranscriptionService) { }
+
 
   getColor(index:number): string {
     

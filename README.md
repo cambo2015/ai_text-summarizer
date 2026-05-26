@@ -14,8 +14,8 @@ For docker setup see the readme in /backend
 ### Dependencies
 * Chat GPT and Mistral API keys
 * Ffmpeg (install from command line)
-* Python
+* Python 3.11
 * MySQL
 * Stripe tiered setup
-* IntelliJ - used to run the application
+* IntelliJ 2025.3.2- used to run the application
 
